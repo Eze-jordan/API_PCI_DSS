@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions Sécurisées</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            color: #555;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        table {
+            width: 180%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        table th, table td {
+            padding: 14px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        table td {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px;
+            }
+
+            table {
+                font-size: 0.8rem;
+            }
+
+            table th, table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Transactions Sécurisées</h1>
+    <button onclick="fetchTransactions()">Récupérer Transactions</button>
+    <div id="loading">Chargement...</div>
+    <table id="transactionsTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date Transaction</th>
+            <th>Heure Transaction</th>
+            <th>Origine</th>
+            <th>Moyen Paiement</th>
+            <th>PAN</th>
+            <th>Date Fin Validité</th>
+            <th>CVX</th>
+            <th>Montant</th>
+            <th>Devise</th>
+            <th>Identifiant Banque Acquéreur</th>
+            <th>Identifiant Banque Eméteur</th>
+            <th>Scheme</th>
+            <th>Type Produit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Les lignes de transactions seront insérées ici -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function fetchTransactions() {
+        document.getElementById("loading").style.display = "block";
+        try {
+            const response = await fetch('http://localhost:8080/transactions');
+
+            if (response.ok) {
+                const transactions = await response.json();
+                const tableBody = document.querySelector("#transactionsTable tbody");
+                tableBody.innerHTML = ""; // Clear previous results
+
+                transactions.forEach(trx => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${trx.id}</td>
+                        <td>${trx.dateTransaction}</td>
+                        <td>${trx.heureTransaction}</td>
+                        <td>${trx.origine}</td>
+                        <td>${trx.moyenPaiement}</td>
+                        <td>${trx.numPan}</td>
+                        <td>${trx.dateFinValidite}</td>
+                        <td>${trx.cvx}</td>
+                        <td>${trx.montant}</td>
+                        <td>${trx.devise}</td>
+                        <td>${trx.identifiantBanqueAcquereur}</td>
+                        <td>${trx.identifiantBanqueEmetteur}</td>
+                        <td>${trx.scheme}</td>
+                        <td>${trx.typeProduit}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                document.getElementById("loading").style.display = "none";
+            } else {
+                alert("Erreur lors de la récupération des transactions.");
+                document.getElementById("loading").style.display = "none";
+            }
+        } catch (error) {
+            alert("Une erreur est survenue : " + error.message);
+            document.getElementById("loading").style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

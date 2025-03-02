@@ -10,8 +10,9 @@
             font-family: 'Arial', sans-serif;
             background-color: #f7f7f7;
             padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
         }
-
 
         h1 {
             text-align: center;
@@ -20,16 +21,28 @@
             margin-bottom: 20px;
         }
 
+        /* Form styles */
+        .form-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], select {
+            width: 200px;
+        }
+
         button {
-            display: block;
-            margin: 0 auto;
             background-color: #4CAF50;
             color: white;
-            padding: 12px 24px;
-            border: none;
             cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
             transition: background-color 0.3s;
         }
 
@@ -37,6 +50,7 @@
             background-color: #45a049;
         }
 
+        /* Loading message */
         #loading {
             display: none;
             text-align: center;
@@ -45,8 +59,9 @@
             font-size: 1.2rem;
         }
 
+        /* Table styles */
         table {
-            width: 180%;
+            width: 100%;
             border-collapse: collapse;
             margin-top: 30px;
         }
@@ -101,9 +116,33 @@
 
 <div class="container">
     <h1>Transactions Sécurisées</h1>
-    <button onclick="fetchTransactions()">Récupérer Transactions</button>
+
+    <!-- Formulaire pour ajouter une nouvelle transaction -->
+    <div class="form-container">
+        <h2>Ajouter une Transaction</h2>
+        <form id="transactionForm">
+            <input type="date" id="dateTransaction" placeholder="Date Transaction" required><br>
+            <input type="text" id="heureTransaction" placeholder="Heure Transaction" required><br>
+            <input type="text" id="origine" placeholder="Origine" required><br>
+            <input type="text" id="moyenPaiement" placeholder="Moyen de Paiement" required><br>
+            <input type="text" id="numPan" placeholder="Numéro PAN" required><br>
+            <input type="date" id="dateFinValidite" placeholder="Date Fin Validité" required><br>
+            <input type="text" id="cvx" placeholder="CVX" required><br>
+            <input type="number" id="montant" placeholder="Montant" required><br>
+            <input type="text" id="devise" placeholder="Devise" required><br>
+            <input type="text" id="identifiantBanqueAcquereur" placeholder="Identifiant Banque Acquéreur" required><br>
+            <input type="text" id="identifiantBanqueEmetteur" placeholder="Identifiant Banque Eméteur" required><br>
+            <input type="text" id="scheme" placeholder="Scheme" required><br>
+            <input type="text" id="typeProduit" placeholder="Type Produit" required><br>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+
     <div id="loading">Chargement...</div>
-    <table id="transactionsTable">
+
+    <!-- Deux tables pour afficher les transactions en deux sections -->
+    <h2>Transactions Partie 1</h2>
+    <table id="transactionsTablePart1">
         <thead>
         <tr>
             <th>ID</th>
@@ -126,6 +165,33 @@
         <!-- Les lignes de transactions seront insérées ici -->
         </tbody>
     </table>
+
+    <h2>Transactions Partie 2</h2>
+    <table id="transactionsTablePart2">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Date Transaction</th>
+            <th>Heure Transaction</th>
+            <th>Origine</th>
+            <th>Moyen Paiement</th>
+            <th>PAN</th>
+            <th>Date Fin Validité</th>
+            <th>CVX</th>
+            <th>Montant</th>
+            <th>Devise</th>
+            <th>Identifiant Banque Acquéreur</th>
+            <th>Identifiant Banque Eméteur</th>
+            <th>Scheme</th>
+            <th>Type Produit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Les lignes de transactions seront insérées ici -->
+        </tbody>
+    </table>
+
+    <button onclick="fetchTransactions()">Récupérer Transactions</button>
 </div>
 
 <script>
@@ -136,10 +202,12 @@
 
             if (response.ok) {
                 const transactions = await response.json();
-                const tableBody = document.querySelector("#transactionsTable tbody");
-                tableBody.innerHTML = ""; // Clear previous results
+                const tableBodyPart1 = document.querySelector("#transactionsTablePart1 tbody");
+                const tableBodyPart2 = document.querySelector("#transactionsTablePart2 tbody");
+                tableBodyPart1.innerHTML = ""; // Clear previous results
+                tableBodyPart2.innerHTML = ""; // Clear previous results
 
-                transactions.forEach(trx => {
+                transactions.forEach((trx, index) => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${trx.id}</td>
@@ -157,7 +225,12 @@
                         <td>${trx.scheme}</td>
                         <td>${trx.typeProduit}</td>
                     `;
-                    tableBody.appendChild(row);
+
+                    if (index % 2 === 0) {
+                        tableBodyPart1.appendChild(row);
+                    } else {
+                        tableBodyPart2.appendChild(row);
+                    }
                 });
 
                 document.getElementById("loading").style.display = "none";
@@ -170,6 +243,48 @@
             document.getElementById("loading").style.display = "none";
         }
     }
+
+    // Fonction pour gérer l'envoi du formulaire
+    document.getElementById('transactionForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const newTransaction = {
+            id: document.getElementById('id').value,
+            dateTransaction: document.getElementById('dateTransaction').value,
+            heureTransaction: document.getElementById('heureTransaction').value,
+            origine: document.getElementById('origine').value,
+            moyenPaiement: document.getElementById('moyenPaiement').value,
+            numPan: document.getElementById('numPan').value,
+            dateFinValidite: document.getElementById('dateFinValidite').value,
+            cvx: document.getElementById('cvx').value,
+            montant: document.getElementById('montant').value,
+            devise: document.getElementById('devise').value,
+            identifiantBanqueAcquereur: document.getElementById('identifiantBanqueAcquereur').value,
+            identifiantBanqueEmetteur: document.getElementById('identifiantBanqueEmetteur').value,
+            scheme: document.getElementById('scheme').value,
+            typeProduit: document.getElementById('typeProduit').value
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/transactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newTransaction)
+            });
+
+            if (response.ok) {
+                alert("Transaction ajoutée avec succès");
+                document.getElementById('transactionForm').reset(); // Clear form fields
+                fetchTransactions(); // Refresh transactions
+            } else {
+                alert("Erreur lors de l'ajout de la transaction");
+            }
+        } catch (error) {
+            alert("Une erreur est survenue : " + error.message);
+        }
+    });
 </script>
 
 </body>

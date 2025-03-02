@@ -1,30 +1,35 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:C="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactions Sécurisées</title>
     <style>
-        /* Global Styles */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
+            background-color: #FFFFFF;
             padding: 20px;
-            margin: 0;
-            box-sizing: border-box;
         }
 
         h1 {
             text-align: center;
             color: #333;
-            font-size: 2rem;
-            margin-bottom: 20px;
         }
 
-        /* Form styles */
-        .form-container {
+        .form-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px; /* Espace entre les éléments */
             margin-bottom: 30px;
-            text-align: center;
+        }
+
+
+
+        .form-wrapper img {
+            width: 400px; /* Ajuste la taille des images */
+            height: auto;
+            padding-left: 30px;
         }
 
         input, button {
@@ -33,24 +38,22 @@
             border-radius: 5px;
             border: 1px solid #ddd;
             font-size: 1rem;
-        }
-
-        input[type="text"], input[type="number"], input[type="date"], select {
-            width: 200px;
+            width: 100%;
         }
 
         button {
             background-color: #4CAF50;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border: none;
+            font-size: 1rem;
         }
+
 
         button:hover {
             background-color: #45a049;
         }
 
-        /* Loading message */
         #loading {
             display: none;
             text-align: center;
@@ -59,9 +62,8 @@
             font-size: 1.2rem;
         }
 
-        /* Table styles */
         table {
-            width: 100%;
+            width: 160%;
             border-collapse: collapse;
             margin-top: 30px;
         }
@@ -75,58 +77,25 @@
         table th {
             background-color: #4CAF50;
             color: white;
-            font-weight: bold;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        table tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        table td {
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        /* Media Queries */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            button {
-                width: 100%;
-                padding: 12px;
-            }
-
-            table {
-                font-size: 0.8rem;
-            }
-
-            table th, table td {
-                padding: 10px;
-            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Transactions Sécurisées</h1>
+<h1>Transactions Sécurisées</h1>
 
-    <!-- Formulaire pour ajouter une nouvelle transaction -->
+<!-- Formulaire avec images -->
+<div class="form-wrapper">
+    <img src="https://www.sogebel.ht/wp-content/uploads/2021/06/product_creditcard_classic_internationale-1.jpeg" alt="Image gauche">
     <div class="form-container">
         <h2>Ajouter une Transaction</h2>
         <form id="transactionForm">
-            <input type="date" id="dateTransaction" placeholder="Date Transaction" required><br>
-            <input type="text" id="heureTransaction" placeholder="Heure Transaction" required><br>
+            <input type="text" id="dateTransaction" placeholder="AAAA-MM-JJ (Date Transaction)" required><br>
+            <input type="text" id="heureTransaction" placeholder="HH:MM (Heure Transaction)" required><br>
             <input type="text" id="origine" placeholder="Origine" required><br>
             <input type="text" id="moyenPaiement" placeholder="Moyen de Paiement" required><br>
             <input type="text" id="numPan" placeholder="Numéro PAN" required><br>
-            <input type="date" id="dateFinValidite" placeholder="Date Fin Validité" required><br>
+            <input type="text" id="dateFinValidite" placeholder="AAAA-MM-JJ (Date Fin Validité)" required><br>
             <input type="text" id="cvx" placeholder="CVX" required><br>
             <input type="number" id="montant" placeholder="Montant" required><br>
             <input type="text" id="devise" placeholder="Devise" required><br>
@@ -137,62 +106,37 @@
             <button type="submit">Envoyer</button>
         </form>
     </div>
-
-    <div id="loading">Chargement...</div>
-
-    <!-- Deux tables pour afficher les transactions en deux sections -->
-    <h2>Transactions Partie 1</h2>
-    <table id="transactionsTablePart1">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Date Transaction</th>
-            <th>Heure Transaction</th>
-            <th>Origine</th>
-            <th>Moyen Paiement</th>
-            <th>PAN</th>
-            <th>Date Fin Validité</th>
-            <th>CVX</th>
-            <th>Montant</th>
-            <th>Devise</th>
-            <th>Identifiant Banque Acquéreur</th>
-            <th>Identifiant Banque Eméteur</th>
-            <th>Scheme</th>
-            <th>Type Produit</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Les lignes de transactions seront insérées ici -->
-        </tbody>
-    </table>
-
-    <h2>Transactions Partie 2</h2>
-    <table id="transactionsTablePart2">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Date Transaction</th>
-            <th>Heure Transaction</th>
-            <th>Origine</th>
-            <th>Moyen Paiement</th>
-            <th>PAN</th>
-            <th>Date Fin Validité</th>
-            <th>CVX</th>
-            <th>Montant</th>
-            <th>Devise</th>
-            <th>Identifiant Banque Acquéreur</th>
-            <th>Identifiant Banque Eméteur</th>
-            <th>Scheme</th>
-            <th>Type Produit</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Les lignes de transactions seront insérées ici -->
-        </tbody>
-    </table>
-
-    <button onclick="fetchTransactions()">Récupérer Transactions</button>
+    <img src="https://www.bnc.ca/content/dam/bnc/particuliers/catalogue/cartes-credit/macredit-carte-300x190.png" alt="Image droite">
 </div>
+
+<div id="loading">Chargement...</div>
+
+<!-- Tableau unique -->
+<h2>Liste des Transactions</h2>
+<table id="transactionsTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Heure</th>
+        <th>Origine</th>
+        <th>Moyen Paiement</th>
+        <th>PAN</th>
+        <th>Date Fin Validité</th>
+        <th>CVX</th>
+        <th>Montant</th>
+        <th>Devise</th>
+        <th>Banque Acquéreur</th>
+        <th>Banque Eméteur</th>
+        <th>Scheme</th>
+        <th>Type Produit</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<button onclick="fetchTransactions()">Récupérer Transactions</button>
 
 <script>
     async function fetchTransactions() {
@@ -200,56 +144,44 @@
         try {
             const response = await fetch('http://localhost:8080/transactions');
 
-            if (response.ok) {
-                const transactions = await response.json();
-                const tableBodyPart1 = document.querySelector("#transactionsTablePart1 tbody");
-                const tableBodyPart2 = document.querySelector("#transactionsTablePart2 tbody");
-                tableBodyPart1.innerHTML = ""; // Clear previous results
-                tableBodyPart2.innerHTML = ""; // Clear previous results
+            if (!response.ok) throw new Error("Erreur lors de la récupération des transactions.");
 
-                transactions.forEach((trx, index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${trx.id}</td>
-                        <td>${trx.dateTransaction}</td>
-                        <td>${trx.heureTransaction}</td>
-                        <td>${trx.origine}</td>
-                        <td>${trx.moyenPaiement}</td>
-                        <td>${trx.numPan}</td>
-                        <td>${trx.dateFinValidite}</td>
-                        <td>${trx.cvx}</td>
-                        <td>${trx.montant}</td>
-                        <td>${trx.devise}</td>
-                        <td>${trx.identifiantBanqueAcquereur}</td>
-                        <td>${trx.identifiantBanqueEmetteur}</td>
-                        <td>${trx.scheme}</td>
-                        <td>${trx.typeProduit}</td>
-                    `;
+            const transactions = await response.json();
+            const tableBody = document.querySelector("#transactionsTable tbody");
+            tableBody.innerHTML = "";
 
-                    if (index % 2 === 0) {
-                        tableBodyPart1.appendChild(row);
-                    } else {
-                        tableBodyPart2.appendChild(row);
-                    }
-                });
+            transactions.forEach(trx => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${trx.id}</td>
+                    <td>${trx.dateTransaction}</td>
+                    <td>${trx.heureTransaction}</td>
+                    <td>${trx.origine}</td>
+                    <td>${trx.moyenPaiement}</td>
+                    <td>${trx.numPan}</td>
+                    <td>${trx.dateFinValidite}</td>
+                    <td>${trx.cvx}</td>
+                    <td>${trx.montant}</td>
+                    <td>${trx.devise}</td>
+                    <td>${trx.identifiantBanqueAcquereur}</td>
+                    <td>${trx.identifiantBanqueEmetteur}</td>
+                    <td>${trx.scheme}</td>
+                    <td>${trx.typeProduit}</td>
+                `;
+                tableBody.appendChild(row);
+            });
 
-                document.getElementById("loading").style.display = "none";
-            } else {
-                alert("Erreur lors de la récupération des transactions.");
-                document.getElementById("loading").style.display = "none";
-            }
         } catch (error) {
-            alert("Une erreur est survenue : " + error.message);
+            alert(error.message);
+        } finally {
             document.getElementById("loading").style.display = "none";
         }
     }
 
-    // Fonction pour gérer l'envoi du formulaire
     document.getElementById('transactionForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
         const newTransaction = {
-            id: document.getElementById('id').value,
             dateTransaction: document.getElementById('dateTransaction').value,
             heureTransaction: document.getElementById('heureTransaction').value,
             origine: document.getElementById('origine').value,
@@ -274,15 +206,14 @@
                 body: JSON.stringify(newTransaction)
             });
 
-            if (response.ok) {
-                alert("Transaction ajoutée avec succès");
-                document.getElementById('transactionForm').reset(); // Clear form fields
-                fetchTransactions(); // Refresh transactions
-            } else {
-                alert("Erreur lors de l'ajout de la transaction");
-            }
+            if (!response.ok) throw new Error("Erreur lors de l'ajout de la transaction.");
+
+            alert("Transaction ajoutée avec succès !");
+            document.getElementById('transactionForm').reset();
+            fetchTransactions(); // Mettre à jour la liste
+
         } catch (error) {
-            alert("Une erreur est survenue : " + error.message);
+            alert(error.message);
         }
     });
 </script>

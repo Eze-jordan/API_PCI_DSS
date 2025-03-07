@@ -37,7 +37,7 @@ public class TransactionService {
     }
 
     private String maskPan(String pan) {
-        return pan.substring(0, 4) + " XX XX XXXX " + pan.substring(pan.length() - 4);
+        return pan.substring(0, 6) + "  XX XXXX " + pan.substring(pan.length() - 4);
     }
 
 
